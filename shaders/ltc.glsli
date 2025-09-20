@@ -1,0 +1,40 @@
+//
+// Copyright (C) YuqiaoZhang(HanetakaChou)
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef _LTC_GLSLI_
+#define _LTC_GLSLI_ 1
+
+#include "../thirdparty/Hemispherical-Directional-Reflectance/shaders/brx_hemispherical_directional_reflectance.bsli"
+#include "../thirdparty/Linearly-Transformed-Cosine/shaders/brx_linearly_transformed_cosine_attenuation.bsli"
+#include "../thirdparty/Linearly-Transformed-Cosine/shaders/brx_linearly_transformed_cosine_radiance.bsli"
+#include "preintegrated_hdr.glsli"
+
+#define LTC_MATRIX_LUT_TR_INDEX 0
+
+brx_int2 brx_ltc_application_bridge_get_specular_matrix_lut_dimension()
+{
+    highp ivec2 lut_texture_size = textureSize(ltc_matrix_lut, 0);
+    return lut_texture_size;
+}
+
+brx_float4 brx_ltc_application_bridge_get_specular_matrix_lut(in brx_float2 in_lut_uv)
+{
+    highp vec4 ltc_matrix_lut_tr = textureLod(ltc_matrix_lut, in_lut_uv, 0.0).rgba;
+    return ltc_matrix_lut_tr;
+}
+
+#endif

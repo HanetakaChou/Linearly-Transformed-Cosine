@@ -1,0 +1,23 @@
+name: build windows
+
+on:
+  push:
+    branches: [demo]
+  pull_request:
+    branches: [demo]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        platform: [x86, x64]
+    steps:
+      - uses: actions/checkout@main
+        with:
+          submodules: 'recursive'
+      - uses: microsoft/setup-msbuild@main
+      - shell: cmd
+        run: |
+          msbuild ./build/Linearly-Transformed-Cosine.sln /p:Configuration=${{matrix.configuration}} /p:Platform=${{matrix.platform}}

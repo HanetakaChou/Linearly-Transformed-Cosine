@@ -1,0 +1,5 @@
+/.vs
+/bin
+/obj
+/brx_linearly_transformed_cosine_look_up_table_matrices.dds
+/*.vcxproj.user
