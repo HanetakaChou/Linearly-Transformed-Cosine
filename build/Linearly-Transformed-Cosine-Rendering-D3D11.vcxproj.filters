@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{a7c933e8-f964-4aa3-b8f8-94cb8dde6d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{d21fdc33-9e41-4f7b-b35d-cf626d1bd93e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\support_d3d11">
+      <UniqueIdentifier>{8eef869b-61f0-4180-9faa-fb339d3057fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{5c3e6931-30ac-4696-b3b9-734f4049e933}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\demo_d3d11.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\support_d3d11\camera_controller.cpp">
+      <Filter>source\support_d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\support_d3d11\render_main.cpp">
+      <Filter>source\support_d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\support_d3d11\window_main.cpp">
+      <Filter>source\support_d3d11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\assets\plane.cpp">
+      <Filter>assets</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\demo_d3d11.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\support_d3d11\camera_controller.h">
+      <Filter>source\support_d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\support_d3d11\render_main.h">
+      <Filter>source\support_d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\support_d3d11\resolution.h">
+      <Filter>source\support_d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\support_d3d11\window_main.h">
+      <Filter>source\support_d3d11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\assets\plane.h">
+      <Filter>assets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\BRDF.hlsli">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\LTC.hlsli">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\shaders\PreInt_HDR.hlsli">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\shaders\plane_fs.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\shaders\plane_vs.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\shaders\post_process_fs.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\shaders\post_process_vs.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\shaders\rect_light_fs.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\shaders\rect_light_vs.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

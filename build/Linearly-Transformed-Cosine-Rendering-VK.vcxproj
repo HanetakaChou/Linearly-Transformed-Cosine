@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{ED614E24-047A-40B3-B5A5-D2D1BF5C8E36}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Linearly-Transformed-Cosine-Rendering-VK</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Linearly-Transformed-Cosine-Rendering-VK</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>ClangCL</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(SolutionDir)\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(SolutionDir)\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(SolutionDir)\obj\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\thirdparty\Vulkan-Loader\lib\win32\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <HeapReserveSize>
+      </HeapReserveSize>
+      <HeapCommitSize>
+      </HeapCommitSize>
+      <StackReserveSize>209715200</StackReserveSize>
+      <StackCommitSize>104857600</StackCommitSize>
+      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\thirdparty\Vulkan-Loader\lib\win32\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <HeapReserveSize>
+      </HeapReserveSize>
+      <HeapCommitSize>
+      </HeapCommitSize>
+      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\thirdparty\Vulkan-Loader\lib\win32\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>vulkan-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\thirdparty\Vulkan-Loader\lib\win32\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\assets\plane.cpp" />
+    <ClCompile Include="..\source\demo_vk.cpp" />
+    <ClCompile Include="..\source\support_vk\camera_controller.cpp" />
+    <ClCompile Include="..\source\support_vk\render_main.cpp" />
+    <ClCompile Include="..\source\support_vk\streaming.cpp" />
+    <ClCompile Include="..\source\support_vk\utils_align_up.cpp" />
+    <ClCompile Include="..\source\support_vk\vma.cpp" />
+    <ClCompile Include="..\source\support_vk\window_main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\assets\plane.h" />
+    <ClInclude Include="..\source\demo_vk.h" />
+    <ClInclude Include="..\source\support_vk\camera_controller.h" />
+    <ClInclude Include="..\source\support_vk\frame_throttling.h" />
+    <ClInclude Include="..\source\support_vk\render_main.h" />
+    <ClInclude Include="..\source\support_vk\resolution.h" />
+    <ClInclude Include="..\source\support_vk\streaming.h" />
+    <ClInclude Include="..\source\support_vk\utils_align_up.h" />
+    <ClInclude Include="..\source\support_vk\window_main.h" />
+    <ClInclude Include="..\shaders\unified_pipeline_layout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\thirdparty\Vulkan-ValidationLayers\bin\win32\x64\VkLayer_khronos_validation.dll">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\thirdparty\Vulkan-ValidationLayers\bin\win32\x64\VkLayer_khronos_validation.json">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\thirdparty\Vulkan-ValidationLayers\bin\win32\x86\VkLayer_khronos_validation.dll">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\thirdparty\Vulkan-ValidationLayers\bin\win32\x86\VkLayer_khronos_validation.json">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\shaders\forward_shading_fragment.glsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"
+
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -O -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"
+
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -O -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_attenuation.bsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_radiance.bsli</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_attenuation.bsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_radiance.bsli</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_attenuation.bsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_radiance.bsli</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_attenuation.bsli;$(SolutionDir)..\thirdparty\Linearly-Transformed-Cosine\shaders\brx_linearly_transformed_cosine_radiance.bsli</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="..\shaders\forward_shading_vertex.glsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -O -o  "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -O -o  "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h;$(SolutionDir)..\shaders\math_consts.glsli;$(SolutionDir)..\shaders\ltc.glsli;$(SolutionDir)..\shaders\preintegrated_hdr.glsli</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\brdf.glsli" />
+    <None Include="..\shaders\ltc.glsli" />
+    <None Include="..\shaders\math_consts.glsli" />
+    <CustomBuild Include="..\shaders\post_process_fragment.glsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"
+
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"
+
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -O -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=frag -O -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="..\shaders\post_process_vertex.glsl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -g -O0 -o "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -O -o  "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(SolutionDir)..\thirdparty\shaderc\bin\win32\x64\glslc.exe" -std=310es --target-env=vulkan1.0 -mfmt=num -fshader-stage=vert -O -o  "$(SolutionDir)\..\shaders\spirv\%(Filename).inl" "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\..\shaders\spirv\%(Filename).inl</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)..\shaders\unified_pipeline_layout.h</AdditionalInputs>
+    </CustomBuild>
+    <None Include="..\shaders\preintegrated_hdr.glsli" />
+    <None Include="..\shaders\spirv\forward_shading_fragment.inl" />
+    <None Include="..\shaders\spirv\forward_shading_vertex.inl" />
+    <None Include="..\shaders\spirv\post_process_fragment.inl" />
+    <None Include="..\shaders\spirv\post_process_vertex.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
