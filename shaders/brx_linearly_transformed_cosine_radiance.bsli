@@ -1,0 +1,192 @@
+//
+// Copyright (C) YuqiaoZhang(HanetakaChou)
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef _BRX_LINEARLY_TRANSFORMED_COSINE_RADIANCE_BSLI_
+#define _BRX_LINEARLY_TRANSFORMED_COSINE_RADIANCE_BSLI_ 1
+
+#include "../../Brioche-Shader-Language/shaders/brx_shader_language.bsli"
+#include "../../Brioche-Shader-Language/shaders/brx_brdf.bsli"
+
+brx_int2 brx_ltc_application_bridge_get_specular_matrix_lut_dimension();
+
+brx_float4 brx_ltc_application_bridge_get_specular_matrix_lut(in brx_float2 in_lut_uv);
+
+brx_float internal_brx_quad_form_factor_sphere_surface(brx_float3 quad_vertices_sphere_surface[4]);
+
+brx_float3 brx_ltc_radiance(brx_float3 diffuse_albedo, brx_float3 specular_albedo, brx_float roughness, brx_float3 N, brx_float3 V, brx_float3 constant_light_radiance, brx_float3 P, brx_float3 quad_vertices_world_space[4])
+{
+    brx_float3 radiance = brx_float3(0.0, 0.0, 0.0);
+
+    brx_float3 quad_vertices_tangent_space[4];
+    {
+        // For isotropic BRDF, we assume the outgoing V is in the XOZ plane
+        brx_float3 T1;
+        {
+            brx_float3 T1_non_unit = V - N * brx_dot(N, V);
+            brx_float T1_length_square = brx_dot(T1_non_unit, T1_non_unit);
+            T1 = (T1_length_square > brx_float(BRX_TROWBRIDGE_REITZ_TANGENT_SPACE_T1_LENGTH_SQUARE_MINIMUM)) ? T1_non_unit / brx_sqrt(T1_length_square) : brx_float3(1.0, 0.0, 0.0);
+        }
+        brx_float3 T2 = brx_normalize(brx_cross(N, T1));
+
+        quad_vertices_tangent_space[0] = brx_float3(brx_dot(T1, (quad_vertices_world_space[0] - P)), brx_dot(T2, (quad_vertices_world_space[0] - P)), brx_dot(N, (quad_vertices_world_space[0] - P)));
+        quad_vertices_tangent_space[1] = brx_float3(brx_dot(T1, (quad_vertices_world_space[1] - P)), brx_dot(T2, (quad_vertices_world_space[1] - P)), brx_dot(N, (quad_vertices_world_space[1] - P)));
+        quad_vertices_tangent_space[2] = brx_float3(brx_dot(T1, (quad_vertices_world_space[2] - P)), brx_dot(T2, (quad_vertices_world_space[2] - P)), brx_dot(N, (quad_vertices_world_space[2] - P)));
+        quad_vertices_tangent_space[3] = brx_float3(brx_dot(T1, (quad_vertices_world_space[3] - P)), brx_dot(T2, (quad_vertices_world_space[3] - P)), brx_dot(N, (quad_vertices_world_space[3] - P)));
+    }
+
+    // diffuse radiance
+    {
+        brx_float3 quad_vertices_sphere_surface[4] = brx_array_constructor_begin(brx_float3, 4)
+            brx_normalize(quad_vertices_tangent_space[0]) brx_array_constructor_split
+            brx_normalize(quad_vertices_tangent_space[1]) brx_array_constructor_split
+            brx_normalize(quad_vertices_tangent_space[2]) brx_array_constructor_split
+            brx_normalize(quad_vertices_tangent_space[3])
+            brx_array_constructor_end;
+
+        brx_float3 diffuse_form_factor = constant_light_radiance * internal_brx_quad_form_factor_sphere_surface(quad_vertices_sphere_surface);
+
+        radiance += diffuse_albedo * diffuse_form_factor;
+    }
+
+    // specular radiance
+    {
+        brx_float3x3 linear_transform_inversed;
+        {
+            brx_float alpha = brx_max(brx_float(BRX_TROWBRIDGE_REITZ_ALPHA_MINIMUM), roughness * roughness);
+            brx_float NdotV = brx_max(brx_float(BRX_TROWBRIDGE_REITZ_NDOTV_MINIMUM), brx_dot(N, V));
+
+            brx_float2 raw_lut_uv = brx_float2(brx_max(0.0, 1.0 - NdotV), brx_max(0.0, 1.0 - alpha));
+
+            // Remap: [0, 1] -> [0.5/size, 1.0 - 0.5/size]
+            // U3D: [Remap01ToHalfTexelCoord](https://github.com/Unity-Technologies/Graphics/blob/v10.8.0/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl#L661)
+            // UE4: [N/A](https://github.com/EpicGames/UnrealEngine/blob/4.27/Engine/Shaders/Private/RectLight.ush#L450)
+            brx_int2 specular_ltc_matrix_lut_dimension = brx_ltc_application_bridge_get_specular_matrix_lut_dimension();
+            brx_float2 specular_ltc_matrix_lut_uv = (brx_float2(0.5, 0.5) + brx_float2(specular_ltc_matrix_lut_dimension.x - 1, specular_ltc_matrix_lut_dimension.y - 1) * raw_lut_uv) / brx_float2(specular_ltc_matrix_lut_dimension.x, specular_ltc_matrix_lut_dimension.y);
+
+            brx_float4 specular_ltc_matrix_lut = brx_ltc_application_bridge_get_specular_matrix_lut(specular_ltc_matrix_lut_uv);
+
+            linear_transform_inversed = brx_float3x3_from_columns(
+                brx_float3(specular_ltc_matrix_lut.x, 0.0, specular_ltc_matrix_lut.y),
+                brx_float3(0.0, 1.0, 0.0),
+                brx_float3(specular_ltc_matrix_lut.z, 0.0, specular_ltc_matrix_lut.w));
+        }
+
+        // linearly transformed
+        brx_float3 quad_vertices_tangent_space_linearly_transformed[4] = brx_array_constructor_begin(brx_float3, 4)
+            brx_mul(linear_transform_inversed, quad_vertices_tangent_space[0]) brx_array_constructor_split
+            brx_mul(linear_transform_inversed, quad_vertices_tangent_space[1]) brx_array_constructor_split
+            brx_mul(linear_transform_inversed, quad_vertices_tangent_space[2]) brx_array_constructor_split
+            brx_mul(linear_transform_inversed, quad_vertices_tangent_space[3])
+            brx_array_constructor_end;
+
+        brx_float3 quad_vertices_sphere_surface_linearly_transformed[4] = brx_array_constructor_begin(brx_float3, 4)
+            brx_normalize(quad_vertices_tangent_space_linearly_transformed[0]) brx_array_constructor_split
+            brx_normalize(quad_vertices_tangent_space_linearly_transformed[1]) brx_array_constructor_split
+            brx_normalize(quad_vertices_tangent_space_linearly_transformed[2]) brx_array_constructor_split
+            brx_normalize(quad_vertices_tangent_space_linearly_transformed[3])
+            brx_array_constructor_end;
+
+        brx_float3 specular_form_factor = constant_light_radiance * internal_brx_quad_form_factor_sphere_surface(quad_vertices_sphere_surface_linearly_transformed);
+
+        radiance += specular_albedo * specular_form_factor;
+    }
+
+    return radiance;
+}
+
+brx_float internal_brx_quad_form_factor_sphere_surface(brx_float3 quad_vertices_sphere_surface[4])
+{
+    // [Hill 2016] [Stephen Hill, Eric Heitz. "Real-Time Area Lighting: a Journey from Research to Production." SIGGRAPH 2016.](https://blog.selfshadow.com/publications/s2016-advances/)
+    // Theory & Implementation / 3. Clip Polygon to upper hemisphere
+
+    // The vector form factor can be calculated even if the quad id NOT horizon-clipped
+    brx_float3 quad_vector_form_factor;
+    {
+        // [Heitz 2017] [Eric Heitz. "Geometric Derivation of the Irradiance of Polygonal Lights." Technical report 2017.](https://hal.archives-ouvertes.fr/hal-01458129)
+        quad_vector_form_factor = brx_float3(0.0, 0.0, 0.0);
+
+        brx_unroll for (brx_int quad_edge_index = 0; quad_edge_index < 4; ++quad_edge_index)
+        {
+            brx_float3 v1 = quad_vertices_sphere_surface[(quad_edge_index & (4 - 1))];
+            brx_float3 v2 = quad_vertices_sphere_surface[((quad_edge_index + 1) & (4 - 1))];
+
+            // [Hill 2016] [Stephen Hill, Eric Heitz. "Real-Time Area Lighting: a Journey from Research to Production." SIGGRAPH 2016.](https://blog.selfshadow.com/publications/s2016-advances/)
+            // Theory & Implementation / 4. Compute edge intergrals
+
+            // acos(dot(v1, v2)) * normalized(cross(v1, v2)) * (1 / 2PI)
+            // = acos(dot(v1, v2)) * cross(v1, v2)
+            // = (acos(dot(v1, v2)) * (1 / sin(acos(dot(v1, v2)))) * (1 / 2PI)) * cross(v1, v2)
+
+            // cubic rational fit
+            // theta_sintheta ≈ (acos(dot(v1, v2)) * (1 / sin(acos(dot(v1, v2)))) * (1 / 2PI))
+
+            brx_float x = brx_dot(v1, v2);
+            brx_float y = brx_abs(x);
+
+            // (1 / 2PI) has been multiplied here
+            brx_float a = 0.8543985 + (0.4965155 + 0.0145206 * y) * y;
+            brx_float b = 3.4175940 + (4.1616724 + y) * y;
+            brx_float v = a / b;
+
+            brx_float theta_sintheta = (x > 0.0) ? v : 0.5 * brx_rsqrt(brx_max(1.0 - x * x, 1e-7)) - v;
+
+            quad_vector_form_factor += (brx_cross(v1, v2) * theta_sintheta);
+        }
+    }
+
+    brx_float sphere_form_factor;
+    {
+        // [Hill 2016] [Stephen Hill, Eric Heitz. "Real-Time Area Lighting: a Journey from Research to Production." SIGGRAPH 2016.](https://blog.selfshadow.com/publications/s2016-advances/)
+        // Introduce the sphere proxy with the same vector form factor
+
+        // [Snyder 1996]. [John Snyder. "Area Light Sources for Real-Time Graphics." Technical Report 1996.](https://www.microsoft.com/en-us/research/publication/area-light-sources-for-real-time-graphics/)
+#if 0
+        // UE4: [SphereHorizonCosWrap](https://github.com/EpicGames/UnrealEngine/blob/4.27/Engine/Shaders/Private/CapsuleLight.ush#L95)
+        brx_float length_quad_vector_form_factor = brx_length(quad_vector_form_factor);
+
+        // omega: elevation angle
+        brx_float cos_omega = quad_vector_form_factor.z / length_quad_vector_form_factor;
+
+        // sigma: angular extent
+        brx_float square_sin_sigma = length_quad_vector_form_factor;
+        brx_float sin_sigma = brx_sqrt(square_sin_sigma);
+
+        brx_branch if (cos_omega > sin_sigma)
+        {
+            // kill NaN & negative
+            sphere_form_factor = -brx_min(-quad_vector_form_factor.z, 0.0);
+        }
+        else
+        {
+            brx_float tmp = (sin_sigma + brx_max(cos_omega, -sin_sigma));
+
+            // kill NaN & negative
+            sphere_form_factor = -brx_min(-(tmp * tmp / (4.0 * sin_sigma) * square_sin_sigma), 0.0);
+        }
+#else
+        // U3D: [PolygonIrradianceFromVectorFormFactor](https://github.com/Unity-Technologies/Graphics/blob/v10.8.1/com.unity.render-pipelines.core/ShaderLibrary/AreaLighting.hlsl#L150)
+        brx_float length_quad_vector_form_factor = brx_length(quad_vector_form_factor);
+
+        // kill NaN & negative
+        sphere_form_factor = -brx_min(-((length_quad_vector_form_factor * length_quad_vector_form_factor + quad_vector_form_factor.z) / (length_quad_vector_form_factor + 1.0)), 0.0);
+#endif
+    }
+
+    return sphere_form_factor;
+}
+
+#endif

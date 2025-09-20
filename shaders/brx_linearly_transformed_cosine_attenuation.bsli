@@ -1,0 +1,89 @@
+//
+// Copyright (C) YuqiaoZhang(HanetakaChou)
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published
+// by the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef _BRX_LINEARLY_TRANSFORMED_COSINE_ATTENUATION_BSLI_
+#define _BRX_LINEARLY_TRANSFORMED_COSINE_ATTENUATION_BSLI_ 1
+
+#include "../../Brioche-Shader-Language/shaders/brx_shader_language.bsli"
+
+brx_float brx_ltc_attenuation(brx_float culling_range, brx_float3 P, brx_float3 quad_vertices_world_space[4])
+{
+    brx_float3 v0_to_v1 = quad_vertices_world_space[1] - quad_vertices_world_space[0];
+    brx_float3 v0_to_v3 = quad_vertices_world_space[3] - quad_vertices_world_space[0];
+    brx_float3 normal_back_face = brx_normalize(brx_cross(v0_to_v1, v0_to_v3));
+    brx_float3 L = quad_vertices_world_space[0].xyz - P;
+    brx_float z = brx_dot(L, normal_back_face);
+
+    brx_branch if (z > 0.0)
+    {
+        brx_float x;
+        brx_float y;
+        {
+            // [FetchDiffuseFilteredTexture](http://blog.selfshadow.com/publications/ltc/ltc_demo.zip)
+            brx_float3 v0_to_p_projected = normal_back_face * z - L;
+
+            // v0_to_p_projected = u * v0_to_v1 + v * v0_to_v3
+            // ⇒
+            // v0_to_p_projected_dot_v0_to_v1 =  u * v0_to_v1_2 + v * v0_to_v3_dot_v0_to_v1
+            // v0_to_p_projected_dot_v0_to_v3 =  u * v0_to_v1_dot_v0_to_v3 + v * v0_to_v3_2
+            // ⇒
+            // u = (v0_to_p_projected_dot_v0_to_v1 * v0_to_v3_2 - v0_to_p_projected_dot_v0_to_v3 * v0_to_v3_dot_v0_to_v1) / (v0_to_v1_2 * v0_to_v3_2 - v0_to_v1_dot_v0_to_v3 * v0_to_v3_dot_v0_to_v1)
+            // v = (v0_to_p_projected_dot_v0_to_v3 * v0_to_v1_2 - v0_to_p_projected_dot_v0_to_v1 * v0_to_v1_dot_v0_to_v3) / (v0_to_v1_2 * v0_to_v3_2 - v0_to_v1_dot_v0_to_v3 * v0_to_v3_dot_v0_to_v1)
+            brx_float v0_to_p_projected_dot_v0_to_v1 = brx_dot(v0_to_p_projected, v0_to_v1);
+            brx_float v0_to_p_projected_dot_v0_to_v3 = brx_dot(v0_to_p_projected, v0_to_v3);
+            brx_float v0_to_v1_2 = brx_dot(v0_to_v1, v0_to_v1);
+            brx_float v0_to_v3_2 = brx_dot(v0_to_v3, v0_to_v3);
+            brx_float v0_to_v1_dot_v0_to_v3 = brx_dot(v0_to_v1, v0_to_v3);
+            brx_float v0_to_v3_dot_v0_to_v1 = v0_to_v1_dot_v0_to_v3;
+            brx_float determinant = v0_to_v1_2 * v0_to_v3_2 - v0_to_v1_dot_v0_to_v3 * v0_to_v3_dot_v0_to_v1;
+            brx_float u = (v0_to_p_projected_dot_v0_to_v1 * v0_to_v3_2 - v0_to_p_projected_dot_v0_to_v3 * v0_to_v3_dot_v0_to_v1) / determinant;
+            brx_float v = (v0_to_p_projected_dot_v0_to_v3 * v0_to_v1_2 - v0_to_p_projected_dot_v0_to_v1 * v0_to_v1_dot_v0_to_v3) / determinant;
+            x = (u - 0.5) * brx_length(v0_to_v1);
+            y = (v - 0.5) * brx_length(v0_to_v3);
+        }
+
+        brx_float factor_2;
+        {
+            // [EllipsoidalDistanceAttenuation](https://github.com/Unity-Technologies/Graphics/blob/v10.8.0/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl#L1591)
+            // [BoxDistanceAttenuation](https://github.com/Unity-Technologies/Graphics/blob/v10.8.0/com.unity.render-pipelines.high-definition/Runtime/Material/Lit/Lit.hlsl#L1597)
+            brx_float normalized_x = x / (culling_range + 0.5 * brx_length(v0_to_v1));
+            brx_float normalized_y = y / (culling_range + 0.5 * brx_length(v0_to_v3));
+            brx_float normalized_z = z / culling_range;
+            factor_2 = normalized_x * normalized_x + normalized_y * normalized_y + normalized_z * normalized_z;
+        }
+
+        brx_float windowing_function;
+        {
+            // [Sebastian Lagarde, Charles Rousiers. "Moving Frostbite to PBR." SIGGRAPH 2014.](https://www.ea.com/frostbite/news/moving-frostbite-to-pb)
+            // factor = "x (distance) / light_radius"
+            // brx_float factor_2 = factor * factor;
+            brx_float factor_4 = factor_2 * factor_2;
+            brx_float distance_factor = brx_clamp(1.0 - factor_4, 0.0, 1.0);
+            brx_float smooth_distance_factor = distance_factor * distance_factor;
+            windowing_function = smooth_distance_factor;
+        }
+
+        return windowing_function;
+    }
+    else
+    {
+        // TODO: some parts of the quad may still in the upper hemisphere
+        return 0.0;
+    }
+}
+
+#endif
